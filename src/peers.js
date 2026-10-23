@@ -4,24 +4,9 @@
 
 let peerChannel;
 
-function messageFromPeer(msg) {
-  // Safety checks
-  if (msg.constructor !== Object) { return; }
-  if (!("event" in msg)) { return; }
-  if (!("time" in msg)) { return; }
-
-  // Event handling
-  if (msg.event === "play") {
-    videoPlayerNode.currentTime = msg.time
-    if (videoPlayerNode.paused) { videoPlayerNode.play() }
-  } else if (msg.event === "pause") {
-    videoPlayerNode.currentTime = msg.time
-    if (!videoPlayerNode.paused) { videoPlayerNode.pause() }
-  }
-
-}
-
 function sendToPeer(msg) {
+  console.log(msg)
+
   if (peerChannel) {
     peerChannel.send(JSON.stringify(msg));
   }
@@ -47,7 +32,12 @@ function setup(channel) {
 // CONNECTION
 
 const peerConnection = new RTCPeerConnection({
-  iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+  iceServers: [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun1.l.google.com:19302' },
+    { urls: 'stun:stun2.l.google.com:19302' },
+    { urls: 'stun:stun3.l.google.com:19302' },
+  ]
 });
 peerConnection.ondatachannel = e => setup(e.channel);
 
@@ -77,8 +67,7 @@ offerButton.onclick = async () => {
   connectionPageText.innerText = "Here is your connection offer, send it to your friend. When you'll accept his answer make sure that he is active on its page."
 };
 
-answerButton.onclick = async () => {
-  let offer = await readClipboard("Paste the offer here");
+async function answerToOffer(offer) {
   let answerToken = await withDisabledControls(new Promise(async (resolve) => {
     await peerConnection.setRemoteDescription(offer);
     await peerConnection.setLocalDescription(await peerConnection.createAnswer());
@@ -92,6 +81,11 @@ answerButton.onclick = async () => {
   show(answerShareButton)
   answerTextBox.value = answerToken;
   connectionPageText.innerText = "Here is your answer to the offer you received, send it to your friend and keep this page open when he is accepting the answer."
+}
+
+answerButton.onclick = async () => {
+  let offer = await readClipboard("Paste the offer here");
+  answerToOffer(offer)
 };
 
 connectButton.onclick = async () => {

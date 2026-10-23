@@ -1,6 +1,6 @@
-async function copyText(textBox) {
+async function copyText(text) {
   try {
-    await navigator.clipboard.writeText(textBox.value);
+    await navigator.clipboard.writeText(text);
   } catch {
     // Fallback for non-secure contexts (plain http on a non-localhost address)
     textBox.select();
@@ -9,16 +9,14 @@ async function copyText(textBox) {
   }
 }
 
-async function shareText(textBox) {
-  const text = textBox.value;
-
+async function shareText(text) {
   if (navigator.share) {
     try {
       await navigator.share({ text });
+      return;
     } catch (err) {
       if (err.name !== "AbortError") console.error("Share failed:", err);
     }
-    return;
   }
 
   window.open(

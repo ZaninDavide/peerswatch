@@ -38,7 +38,14 @@ function withDisabledControls(promise) {
   });
 }
 
-offerCopyButton.onclick = () => copyText(offerTextBox);
-offerShareButton.onclick = () => shareText(offerTextBox);
-answerCopyButton.onclick = () => copyText(answerTextBox);
-answerShareButton.onclick = () => shareText(answerTextBox);
+function makeOfferURL(offer) {
+  const params = new URLSearchParams();
+  params.set('offer', offer);
+  const baseUrl = window.location.href.split('?')[0];
+  return `${baseUrl}?${params.toString()}`;
+}
+
+offerCopyButton.onclick = () => copyText(makeOfferURL(offerTextBox.value));
+offerShareButton.onclick = () => shareText(makeOfferURL(offerTextBox.value));
+answerCopyButton.onclick = () => copyText(answerTextBox.value);
+answerShareButton.onclick = () => shareText(answerTextBox.value);

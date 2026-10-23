@@ -1,3 +1,15 @@
+let guardingPause = 0
+function guardedPause() {
+  guardingPause += 1
+  videoPlayerNode.pause()
+}
+
+let guardingPlay = 0
+function guardedPlay() {
+  guardingPlay += 1
+  videoPlayerNode.play()
+}
+
 videoInputNode.onchange = function (event) {
   // Read input file
   let file = this.files[0]
@@ -11,7 +23,12 @@ videoInputNode.onchange = function (event) {
   videoPlayerNode.load()
 }
 
-videoPlayerNode.onplay = function (event) {
+videoPlayerNode.onplay = async function (event) {
+  if (guardingPlay > 0) { 
+    guardingPlay -= 1
+    return;
+  }
+
   message = {
     event: "play",
     time: videoPlayerNode.currentTime,
@@ -19,7 +36,12 @@ videoPlayerNode.onplay = function (event) {
   sendToPeer(message)
 }
 
-videoPlayerNode.onpause = function (event) {
+videoPlayerNode.onpause = async function (event) {
+  if (guardingPause > 0) { 
+    guardingPause -= 1
+    return;
+  }
+
   message = {
     event: "pause",
     time: videoPlayerNode.currentTime,
@@ -27,20 +49,24 @@ videoPlayerNode.onpause = function (event) {
   sendToPeer(message)
 }
 
-videoPlayerNode.onclick = function (event) {
-  console.log("Click")
-}
-
-/*
-videoPlayerNode.onseeked = function (event) {
-  message = {
-    event: "seeked",
-    time: videoPlayerNode.currentTime,
-    }
-    sendToPeer(message)
-}
-*/
-
 refreshButton.onclick = function (event) {
   videoPlayerNode.load()
+}
+
+function messageFromPeer(msg) {
+  // Safety checks
+  if (msg.constructor !== Object) { return; }
+  if (!("event" in msg)) { return; }
+  if (!("time" in msg)) { return; }
+
+  // Event handling
+  if (msg.event === "play") {
+    videoPlayerNode.currentTime = msg.time
+    if (videoPlayerNode.paused) { guardedPlay() }
+  } else if (msg.event === "pause") {
+    videoPlayerNode.currentTime = msg.time
+    if (!videoPlayerNode.paused) { guardedPause() }
+  } else if (msg.event === "click") {
+    videoPlayerNode.currentTime = msg.time
+  }
 }

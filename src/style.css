@@ -141,23 +141,19 @@ button:disabled:hover {
 }
 
 #connectionPage h1 {
-  margin: 0 0 20px;
+  margin: 0 0 8px;
   font-size: 1.6rem;
   font-weight: 650;
   letter-spacing: -0.02em;
+  text-align: center;
 }
 
 #connectionPage p {
-  margin: 0 0 24px;
+  margin: 0 0 20px;
   color: var(--muted);
   font-size: 0.85rem;
   line-height: 1.6;
   text-align: left;
-}
-
-/* Intro text under the title */
-#connectionPage h1 + p {
-  margin-bottom: 28px;
   text-align: center;
 }
 
