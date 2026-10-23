@@ -56,6 +56,7 @@ body {
   font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
 }
 
 /* ---------- Buttons ---------- */
@@ -100,6 +101,29 @@ input:focus-visible {
 #connectButton:hover {
   background: var(--accent-hover);
   border-color: var(--accent-hover);
+}
+
+/* Disabled state */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Keep the resting look on hover */
+button:disabled:hover {
+  background: transparent;
+  border-color: var(--border);
+}
+
+#refreshButton:disabled:hover {
+  background: var(--surface);
+}
+
+#offerButton:disabled:hover,
+#connectButton:disabled:hover {
+  background: var(--accent);
+  border-color: var(--accent);
 }
 
 /* ---------- Connection page (login card) ---------- */

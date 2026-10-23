@@ -21,10 +21,18 @@ async function shareText(textBox) {
     return;
   }
 
-  // Fallback: WhatsApp (app if installed, otherwise WhatsApp Web)
   window.open(
     "https://wa.me/?text=" + encodeURIComponent(text),
     "_blank",
     "noopener"
   );
+}
+
+async function readClipboard(prompt) {
+  try {
+    return JSON.parse(await navigator.clipboard.readText());
+  } catch {
+    const pasted = window.prompt(prompt);
+    return pasted ? JSON.parse(pasted) : null;
+  }
 }

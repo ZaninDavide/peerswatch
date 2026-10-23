@@ -27,6 +27,10 @@ videoPlayerNode.onpause = function (event) {
   sendToPeer(message)
 }
 
+videoPlayerNode.onclick = function (event) {
+  console.log("Click")
+}
+
 /*
 videoPlayerNode.onseeked = function (event) {
   message = {

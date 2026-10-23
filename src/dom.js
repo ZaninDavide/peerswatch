@@ -17,12 +17,25 @@ const answerCopyButton = document.getElementById("answerCopyButton");
 const answerShareButton = document.getElementById("answerShareButton");
 
 const refreshButton = document.getElementById("refreshButton")
+const connectionPageText = document.getElementById("connectionPageText")
 
 function show(elem) {
     elem.style.removeProperty("display")
 }
+
 function hide(elem) {
     elem.style.setProperty("display", "none")
+}
+
+function withDisabledControls(promise) {
+  const controls = [...document.querySelectorAll("button, input")]
+    .filter(el => !el.disabled);
+
+  controls.forEach(el => { el.disabled = true; });
+
+  return Promise.resolve(promise).finally(() => {
+    controls.forEach(el => { el.disabled = false; });
+  });
 }
 
 offerCopyButton.onclick = () => copyText(offerTextBox);
