@@ -1,13 +1,25 @@
 let guardingPause = 0
 function guardedPause() {
-  guardingPause += 1
-  videoPlayerNode.pause()
+  if (!videoPlayerNode.paused) { 
+    guardingPause += 1
+    videoPlayerNode.pause()
+  }
 }
 
 let guardingPlay = 0
 function guardedPlay() {
-  guardingPlay += 1
-  videoPlayerNode.play()
+  if (videoPlayerNode.paused) { 
+    guardingPlay += 1
+    videoPlayerNode.play()
+  }
+}
+
+let guardingTimeChange = 0
+function guardedTimeChange(time) {
+  if (videoPlayerNode.paused) { 
+    guardingPlay += 1
+    videoPlayerNode.currentTime = time
+  }
 }
 
 videoInputNode.onchange = function (event) {
@@ -49,6 +61,23 @@ videoPlayerNode.onpause = async function (event) {
   sendToPeer(message)
 }
 
+let lastTimeChangeEvent = 0
+videoPlayerNode.ontimeupdate = async function (event) {
+  if (guardingTimeChange > 0) { 
+    guardingTimeChange -= 1
+    return;
+  }
+  
+  if (!videoPlayerNode.paused) { return; }
+  if (videoPlayerNode.currentTime == lastTimeChangeEvent) { return; }
+  lastTimeChangeEvent = videoPlayerNode.currentTime
+  message = {
+    event: "timeupdate",
+    time: videoPlayerNode.currentTime,
+  }
+  sendToPeer(message)
+}
+
 refreshButton.onclick = function (event) {
   videoPlayerNode.load()
 }
@@ -62,11 +91,12 @@ function messageFromPeer(msg) {
   // Event handling
   if (msg.event === "play") {
     videoPlayerNode.currentTime = msg.time
-    if (videoPlayerNode.paused) { guardedPlay() }
+    guardedPlay()
   } else if (msg.event === "pause") {
     videoPlayerNode.currentTime = msg.time
-    if (!videoPlayerNode.paused) { guardedPause() }
-  } else if (msg.event === "click") {
+    guardedPause()
+  } else if (msg.event === "timeupdate") {
     videoPlayerNode.currentTime = msg.time
+    guardedPause()
   }
 }

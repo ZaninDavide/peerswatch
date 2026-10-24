@@ -64,7 +64,7 @@ offerButton.onclick = async () => {
   hide(answerButton)
   hide(offerButton)
   offerTextBox.value = offerToken;
-  connectionPageText.innerText = "Here is your connection offer, send it to your friend. When you'll accept his answer make sure that he is active on its page."
+  connectionPageText.innerText = "Here is your join offer, send it to your friend."
 };
 
 async function answerToOffer(offer) {
@@ -80,7 +80,7 @@ async function answerToOffer(offer) {
   show(answerCopyButton)
   show(answerShareButton)
   answerTextBox.value = answerToken;
-  connectionPageText.innerText = "Here is your answer to the offer you received, send it to your friend and keep this page open when he is accepting the answer."
+  connectionPageText.innerText = "Here is your answer to the offer you received, send it to your friend."
 }
 
 answerButton.onclick = async () => {
