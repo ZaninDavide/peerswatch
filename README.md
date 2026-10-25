@@ -1,5 +1,5 @@
 # PeersWatch
-Enjoy your favorite movies with a friend, even when far apart: one video, two people. Start now [here](https://peerswatch.surge.sh/).
+Enjoy your favorite movies with friends, even when far apart. Start now [here](https://peerswatch.surge.sh/).
 
 ## Details
-The two peers establish a WebRTC peer-to-peer connection and use the direct channel to keep the video players synced. To establish a connection peers are required to share an "offer" and an "answer" string via a different communication channel. Both peers are required to have a local copy of the video file and the app does no video streaming. The bandwidth used is almost zero.
+A user creates a new room and shares the link to the room with other people. Each person loads a local copy of the same movie. The app makes sure that the video players stay synchronized. Each member of the room is equal, there's no room owner and the room closes when all peers leave. No login is required and the server does no video streaming, meaning that the bandwidth usage is extremely low.
