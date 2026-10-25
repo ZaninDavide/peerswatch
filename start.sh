@@ -1,3 +1,3 @@
 #!/bin/sh
 cd server
-npm run server.js
+npm run start
