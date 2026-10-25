@@ -8,8 +8,8 @@ Type=simple
 Restart=always
 RestartSec=1
 User=root
-ExecStart=/home/andrea/apis/peerswatch/server
-WorkingDirectory=/home/andrea/apis/peerswatch
+ExecStart=/home/andrea/apis/peerswatch/start.sh
+WorkingDirectory=/home/andrea/apis/peerswatch/
 EnvironmentFile=/home/andrea/apis/peerswatch/.env
 
 [Install]
