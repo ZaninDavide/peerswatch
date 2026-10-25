@@ -4,7 +4,7 @@
   <meta name="description" content="Enjoy your favorite movies with a friend, even when far apart.">
   <meta name="keywords" content="Watch, Movies, Videos, Player, Sync">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/style.css">
   <title>PeersWatch</title>
 </head>
 <body>
@@ -15,30 +15,25 @@
       Enjoy your favorite movies with a friend, even when far apart: one video, two people.
     </p>
     <p>
-      <button id="offerButton">NEW ROOM</button>
-      <input id="offerTextBox" type="text" style="display: none" readonly/>
-      <button id="offerCopyButton" style="display: none"></button>      
-      <button id="offerShareButton" style="display: none"></button>      
-      <button id="connectButton" style="display: none">ACCEPT ANSWER</button>
-      <button id="answerButton">JOIN ROOM</button>
-      <input id="answerTextBox" type="text" style="display: none" readonly/>
-      <button id="answerCopyButton" style="display: none"></button>   
-      <button id="answerShareButton" style="display: none"></button>   
+      <button id="newRoomButton">NEW ROOM</button>
     </p>
   </div>
   <div id="watchPage" style="display: none">
     <p>
+      <a href="/"><button id="backButton" aria-label="Back" title="Back"></button></a>
+      <button id="refreshButton" aria-label="Refresh" title="Refresh"></button>
       <input id="videoInput" type="file" accept="video/*"/>
-      <button id="refreshButton">REFRESH</button>
+      <span id="peersCounter" title="People in the room" aria-label="Number of people watching including you.">
+        <span id="peersCount">1</span>
+      </span>  
     </p>
     <video id="videoPlayer" controls></video>
   </div>
   <div id="closedPage" style="display: none">
-    <p>Connection closed. Go back to the <a href="https://peerswatch.surge.sh">home</a> page.</p>
+    <p>Connection closed. Go back to the <a href="/">home</a> page.</p>
   </div>
-  <script src="dom.js"></script>
-  <script src="clipboard.js"></script>
-  <script src="player.js"></script>
-  <script src="peers.js"></script>
-  <script src="urlanswer.js"></script>
+  <script type="module" src="/dom.js"></script>
+  <script type="module" src="/clipboard.js"></script>
+  <script type="module" src="/player.js"></script>
+  <script type="module" src="/peers.js"></script>
 </body>

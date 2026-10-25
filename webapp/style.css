@@ -14,7 +14,6 @@
   --radius: 12px;
   --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 12px 32px rgba(16, 24, 40, 0.06);
   --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --control-h: 40px;
 }
 
@@ -47,6 +46,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100dvh;
   display: grid;
   place-items: center;
   padding: 24px;
@@ -56,7 +56,14 @@ body {
   font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  min-height: 100dvh;
+}
+
+a {
+  color: var(--accent);
+}
+
+a:hover {
+  color: var(--accent-hover);
 }
 
 /* ---------- Buttons ---------- */
@@ -85,20 +92,20 @@ button:active {
 }
 
 button:focus-visible,
-input:focus-visible {
+input:focus-visible,
+a:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
-#offerButton,
-#connectButton {
+/* Primary action */
+#newRoomButton {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--accent-text);
 }
 
-#offerButton:hover,
-#connectButton:hover {
+#newRoomButton:hover {
   background: var(--accent-hover);
   border-color: var(--accent-hover);
 }
@@ -110,7 +117,6 @@ button:disabled {
   transform: none;
 }
 
-/* Keep the resting look on hover */
 button:disabled:hover {
   background: transparent;
   border-color: var(--border);
@@ -120,8 +126,7 @@ button:disabled:hover {
   background: var(--surface);
 }
 
-#offerButton:disabled:hover,
-#connectButton:disabled:hover {
+#newRoomButton:disabled:hover {
   background: var(--accent);
   border-color: var(--accent);
 }
@@ -145,7 +150,6 @@ button:disabled:hover {
   font-size: 1.6rem;
   font-weight: 650;
   letter-spacing: -0.02em;
-  text-align: center;
 }
 
 #connectionPage p {
@@ -153,8 +157,11 @@ button:disabled:hover {
   color: var(--muted);
   font-size: 0.85rem;
   line-height: 1.6;
-  text-align: left;
-  text-align: center;
+}
+
+/* The paragraph holding the button: no extra bottom space */
+#connectionPage p:last-child {
+  margin: 0;
 }
 
 /* ---------- Info icon ---------- */
@@ -185,73 +192,6 @@ button:disabled:hover {
   border-color: var(--accent);
 }
 
-/* ---------- Action group ----------
-   Main buttons span the full row. When one is hidden, its textbox,
-   copy button and share button take over exactly the same row. */
-
-#connectionPage p:last-child {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 10px 8px;
-  margin: 0;
-}
-
-#offerButton,
-#connectButton,
-#answerButton {
-  grid-column: 1 / -1;
-}
-
-/* ---------- Readonly textboxes ---------- */
-
-#offerTextBox,
-#answerTextBox {
-  min-width: 0;
-  height: var(--control-h);
-  padding: 0 12px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  text-overflow: ellipsis;
-}
-
-/* ---------- Icon buttons (copy + share) ---------- */
-
-#offerCopyButton,
-#answerCopyButton,
-#offerShareButton,
-#answerShareButton {
-  width: var(--control-h);
-  padding: 0;
-}
-
-#offerCopyButton::before,
-#answerCopyButton::before,
-#offerShareButton::before,
-#answerShareButton::before {
-  content: "";
-  display: block;
-  width: 18px;
-  height: 18px;
-  margin: 0 auto;
-  background-color: currentColor;
-  -webkit-mask: var(--icon) center / contain no-repeat;
-  mask: var(--icon) center / contain no-repeat;
-}
-
-#offerCopyButton::before,
-#answerCopyButton::before {
-  --icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='9' y='9' width='11' height='11' rx='2'/><path d='M5 15V6a2 2 0 0 1 2-2h9'/></svg>");
-}
-
-#offerShareButton::before,
-#answerShareButton::before {
-  --icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='18' cy='5' r='3'/><circle cx='6' cy='12' r='3'/><circle cx='18' cy='19' r='3'/><path d='M8.6 13.5l6.8 4M15.4 6.5l-6.8 4'/></svg>");
-}
-
 /* ---------- Watch page ---------- */
 
 #watchPage {
@@ -262,8 +202,8 @@ button:disabled:hover {
 #watchPage p {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin: 0 0 16px;
+  gap: 5px;
+  margin: 0 0 10px;
 }
 
 #videoInput {
@@ -299,10 +239,31 @@ button:disabled:hover {
   border-color: var(--muted);
 }
 
-#refreshButton {
-  width: auto;
+#peersCounter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: var(--control-h);
+  padding: 0 14px;
   flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
   background: var(--surface);
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: default;
+  user-select: none;
+}
+
+#peersCounter::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/><circle cx='12' cy='12' r='3'/></svg>") center / contain no-repeat;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/><circle cx='12' cy='12' r='3'/></svg>") center / contain no-repeat;
 }
 
 #videoPlayer {
@@ -312,6 +273,32 @@ button:disabled:hover {
   border-radius: var(--radius);
   background: #000;
   box-shadow: var(--shadow);
+}
+
+#refreshButton, #backButton {
+  width: var(--control-h);
+  padding: 0;
+  flex-shrink: 0;
+  background: var(--surface);
+}
+
+#refreshButton::before, #backButton::before {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin: 0 auto;
+  background-color: currentColor;
+}
+
+#refreshButton::before {
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='23 4 23 10 17 10'/><path d='M20.49 15a9 9 0 1 1-2.12-9.36L23 10'/></svg>") center / contain no-repeat;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='23 4 23 10 17 10'/><path d='M20.49 15a9 9 0 1 1-2.12-9.36L23 10'/></svg>") center / contain no-repeat;
+}
+
+#backButton::before {
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-arrow-left'><line x1='19' y1='12' x2='5' y2='12'></line><polyline points='12 19 5 12 12 5'></polyline></svg>") center / contain no-repeat;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-arrow-left'><line x1='19' y1='12' x2='5' y2='12'></line><polyline points='12 19 5 12 12 5'></polyline></svg>") center / contain no-repeat;
 }
 
 /* ---------- Closed page ---------- */
@@ -341,13 +328,8 @@ button:disabled:hover {
     padding: 32px 20px 24px;
   }
 
-  #watchPage p {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  #refreshButton {
-    width: 100%;
+  #closedPage {
+    padding: 24px 20px;
   }
 }
 

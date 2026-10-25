@@ -1,3 +1,6 @@
+import { videoInputNode, videoPlayerNode, refreshButton } from "./dom.js"
+import { sendToPeers } from "./peers.js"
+
 let guardingPause = 0
 function guardedPause() {
   if (!videoPlayerNode.paused) { 
@@ -16,8 +19,8 @@ function guardedPlay() {
 
 let guardingTimeChange = 0
 function guardedTimeChange(time) {
-  if (videoPlayerNode.paused) { 
-    guardingPlay += 1
+  if (videoPlayerNode.currentTime != time) { 
+    guardingTimeChange += 1
     videoPlayerNode.currentTime = time
   }
 }
@@ -41,11 +44,11 @@ videoPlayerNode.onplay = async function (event) {
     return;
   }
 
-  message = {
+  const message = {
     event: "play",
     time: videoPlayerNode.currentTime,
   }
-  sendToPeer(message)
+  sendToPeers(message)
 }
 
 videoPlayerNode.onpause = async function (event) {
@@ -54,11 +57,11 @@ videoPlayerNode.onpause = async function (event) {
     return;
   }
 
-  message = {
+  const message = {
     event: "pause",
     time: videoPlayerNode.currentTime,
   }
-  sendToPeer(message)
+  sendToPeers(message)
 }
 
 let lastTimeChangeEvent = 0
@@ -71,18 +74,18 @@ videoPlayerNode.ontimeupdate = async function (event) {
   if (!videoPlayerNode.paused) { return; }
   if (videoPlayerNode.currentTime == lastTimeChangeEvent) { return; }
   lastTimeChangeEvent = videoPlayerNode.currentTime
-  message = {
+  const message = {
     event: "timeupdate",
     time: videoPlayerNode.currentTime,
   }
-  sendToPeer(message)
+  sendToPeers(message)
 }
 
 refreshButton.onclick = function (event) {
   videoPlayerNode.load()
 }
 
-function messageFromPeer(msg) {
+export function processMessageFromPeer(msg) {
   // Safety checks
   if (msg.constructor !== Object) { return; }
   if (!("event" in msg)) { return; }
@@ -90,13 +93,13 @@ function messageFromPeer(msg) {
 
   // Event handling
   if (msg.event === "play") {
-    videoPlayerNode.currentTime = msg.time
+    guardedTimeChange(msg.time)
     guardedPlay()
   } else if (msg.event === "pause") {
-    videoPlayerNode.currentTime = msg.time
+    guardedTimeChange(msg.time)
     guardedPause()
   } else if (msg.event === "timeupdate") {
-    videoPlayerNode.currentTime = msg.time
+    guardedTimeChange(msg.time)
     guardedPause()
   }
 }
